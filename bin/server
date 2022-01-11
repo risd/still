@@ -1,34 +1,23 @@
 #!/usr/bin/env node
 
-var server = require('../').server,
-  optimist = require('optimist'),
-  opener = require('opener');
+const server = require('../').server
+const yargs = require('yargs/yargs')
+const opener = require('opener')
 
-var argv = optimist
+const args = yargs(process.argv.slice(2))
   .usage('Usage: still-server [path] [options]')
-  .describe({
-    e: 'Template engine',
-    p: 'Server port',
-    o: 'Open your site in a web browser',
-    err: 'Relative path to error 404 page',
-    encoding: 'File encoding (input and output)',
-    verbose: 'Verbosity mode: 0 = silent, 1 = default, 2 = warnings, 3 = debug'
-  })
+  .demandCommand(1)
   .alias('e', 'engine')
   .alias('p', 'port')
   .alias('o', 'open')
   .default('e', 'swig')
-  .default('p', 3000)
+  .default('p', 8000)
   .default('err', 'error/404.html')
   .default('encoding', 'utf-8')
-  .argv;
+  .argv
 
-if (!argv._.length) {
-  optimist.showHelp();
-  process.exit(1);
-}
+server.run(args)
 
-server.run(argv);
-if (argv.o) {
-  opener('http://localhost:' + argv.p);
+if (args.o) {
+  opener('http://localhost:' + args.p)
 }

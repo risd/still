@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 
-var still = require('../').build,
-  optimist = require('optimist');
+const still = require('../').build
+const yargs = require('yargs/yargs')
 
-var argv = optimist
+var args = yargs(process.argv.slice(2))
   .usage('Usage: still [path] -o [output path] [options]')
-  .describe({
-    o: 'Output directory',
-    e: 'Template engine',
-    i: 'Ignore path or regular expression',
-    l: 'Create symbolic links to non-template files instead of copying them',
-    encoding: 'File encoding (input and output)',
-    verbose: 'Verbosity mode: 0 = silent, 1 = default, 2 = warnings, 3 = debug'
-  })
-  .demand(['o'])
+  .demandCommand(1)
+  .describe('o', 'Output directory')
+  .describe('e', 'Template engine')
+  .describe('i', 'Ignore path or regular expression')
+  .describe('l', 'Create symbolic links to non-template files instead of copying them')
+  .describe('encoding', 'File encoding (input and output)')
+  .describe('verbose', 'Verbosity mode: 0 = silent, 1 = default, 2 = warnings, 3 = debug')
+  .demandOption(['o'])
   .alias('o', 'out')
   .alias('e', 'engine')
   .alias('i', 'ignore')
@@ -21,11 +20,6 @@ var argv = optimist
   .default('e', 'swig')
   .default('encoding', 'utf-8')
   .default('verbose', 1)
-  .argv;
+  .argv
 
-if (!argv._.length) {
-  optimist.showHelp();
-  process.exit(1);
-}
-
-still.build(argv);
+still.build(args)
