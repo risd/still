@@ -20,6 +20,8 @@ describe('Templates', function () {
         encoding: 'utf-8'
       }, function () {
         fs.readFile(out + '/index.html', 'utf8', function (err, data) {
+          console.log('data')
+          console.log(data)
           data.should.eql('\nhi\n\n');
           done();
         });
